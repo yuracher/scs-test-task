@@ -22,3 +22,4 @@ composer.phar
 .DS_Store
 
 .env
+compose.override.yaml
