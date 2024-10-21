@@ -1,16 +1,15 @@
 <?php
 
 require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../src/helpers.php';
 
-use App\Controllers\ApiController;
-use App\Services\JsonHandler;
-use App\Validators\JsonDataValidator;
-use App\Storage\FileStorage;
+use App\Core\Application;
+use Symfony\Component\Dotenv\Dotenv;
 
-$controller = new ApiController(
-    new JsonHandler(
-        new JsonDataValidator(), new FileStorage(__DIR__ . '/../data/data.json')
-    )
-);
+$dotenv = new Dotenv();
+$dotenv->load(__DIR__ . '/../.env');
 
-$controller->handleRequest();
+$config = require __DIR__ . '/../src/Config/config.php';
+
+$app = new Application($config);
+$app->run();

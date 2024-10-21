@@ -14,6 +14,9 @@ readonly class FileStorage implements DataStorage
 
     public function save(array $data): bool
     {
-        return file_put_contents($this->filePath, json_encode($data)) !== false;
+        $identifier = microtime(true) . '_' . $data['source'];
+        $newFilePath = $this->filePath . "/data_{$identifier}.json";
+
+        return file_put_contents($newFilePath, json_encode($data, JSON_UNESCAPED_UNICODE)) !== false;
     }
 }

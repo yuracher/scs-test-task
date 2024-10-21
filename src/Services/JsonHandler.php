@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\DataStorage;
 use App\Validators\JsonDataValidator;
+use App\Exceptions\ValidationException;
 
 readonly class JsonHandler
 {
@@ -14,18 +15,23 @@ readonly class JsonHandler
     {
     }
 
-    public function handle(array $request): array
+    /**
+     * @param array $data
+     * @return true[]
+     * @throws ValidationException
+     */
+    public function handle(array $data): array
     {
-        if (!$this->validator->validate($request)) {
-            return ['error' => 'Invalid data'];
+        if (!$this->validator->validate($data)) {
+            throw new ValidationException('Invalid data');
         }
 
-        $sanitizedData = $this->validator->sanitize($request);
+        $sanitizedData = $this->validator->sanitize($data);
 
         if ($this->storage->save($sanitizedData)) {
             return ['success' => true];
         }
 
-        return ['error' => 'Failed to save data'];
+        throw new ValidationException('Failed to save data');
     }
 }
