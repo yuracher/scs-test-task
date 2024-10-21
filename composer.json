@@ -1,0 +1,19 @@
+{
+    "name": "yuracher/scs-test-task",
+    "description": "SCS Test Task",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Yurii Cheremishchuk",
+            "email": "yuracher@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
