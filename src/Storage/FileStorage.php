@@ -4,10 +4,12 @@ namespace App\Storage;
 
 use App\Models\DataStorage;
 
-readonly class FileStorage implements DataStorage
+class FileStorage implements DataStorage
 {
+    private string $lastStoredFilePath;
+
     public function __construct(
-        private string $filePath
+        private readonly string $filePath
     )
     {
     }
@@ -16,7 +18,13 @@ readonly class FileStorage implements DataStorage
     {
         $identifier = microtime(true) . '_' . $data['source'];
         $newFilePath = $this->filePath . "/data_{$identifier}.json";
+        $this->lastStoredFilePath = $newFilePath;
 
         return file_put_contents($newFilePath, json_encode($data, JSON_UNESCAPED_UNICODE)) !== false;
+    }
+
+    public function getLastStoredFilePath(): string
+    {
+        return $this->lastStoredFilePath;
     }
 }

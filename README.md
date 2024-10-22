@@ -35,6 +35,11 @@
    }'
    ```
    Replace <port> with the port number specified in compose.override.yaml
+   
+   Running tests inside Docker:
+   ```
+   docker compose exec app ./vendor/bin/phpunit --color
+   ```
 4. **Stop the application:**
 
    To stop and remove containers:
