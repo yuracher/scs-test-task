@@ -1,0 +1,6 @@
+services:
+  app:
+    build:
+      context: .
+    image: registry.gitlab.com/yuracher/scs-test-task:dev
+
