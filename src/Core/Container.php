@@ -4,7 +4,6 @@ namespace App\Core;
 
 use Exception;
 use ReflectionClass;
-use App\Models\DataStorage;
 
 class Container
 {
@@ -16,17 +15,20 @@ class Container
 
     public function get(string $class)
     {
-        // TODO: refactor this
-        if ($class === DataStorage::class) {
-            $storageClass = $this->config['storage']['class'];
-            $filePath = $this->config['storage']['filePath'];
-            return new $storageClass($filePath);
-        }
-
         try {
+
             $reflector = new ReflectionClass($class);
+
             if (!$reflector->isInstantiable()) {
-                throw new Exception("Class $class cannot be instantiated");
+                foreach ($this->config as $component) {
+                    if (in_array($class, class_implements($component['class']))) {
+                        $reflector = new ReflectionClass($component['class']);
+                        if (!empty($component['params'])) {
+                            return $reflector->newInstanceArgs($component['params']);
+                        }
+                        return new $component['class'];
+                    }
+                }
             }
 
             $constructor = $reflector->getConstructor();
