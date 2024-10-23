@@ -8,12 +8,4 @@ class JsonDataValidator
     {
         return isset($data['source']) && !empty($data['payload']);
     }
-
-    public function sanitize(array $data): array
-    {
-        if (isset($data['payload']['email'])) {
-            $data['payload']['email'] = '_SENSITIVE_DATA_REMOVED_';
-        }
-        return $data;
-    }
 }

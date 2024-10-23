@@ -2,8 +2,6 @@
 
 namespace App\Storage;
 
-use App\Models\DataStorage;
-
 class FileStorage implements DataStorage
 {
     private string $lastStoredFilePath;

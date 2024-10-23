@@ -2,6 +2,7 @@
 
 namespace App\Core;
 
+use App\Controllers\ApiController;
 use Exception;
 
 class Application
@@ -20,7 +21,7 @@ class Application
      */
     public function run(): void
     {
-        $controller = $this->container->get('App\Controllers\ApiController');
+        $controller = $this->container->get(ApiController::class);
         $controller->handleRequest();
     }
 }

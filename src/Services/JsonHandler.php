@@ -2,31 +2,41 @@
 
 namespace App\Services;
 
-use App\Models\DataStorage;
-use App\Validators\JsonDataValidator;
 use App\Exceptions\ValidationException;
+use App\Sanitizers\Sanitizer;
+use App\Storage\DataStorage;
+use App\Validators\JsonDataValidator;
+use App\Validators\JsonValidator;
 
 readonly class JsonHandler
 {
     public function __construct(
-        private JsonDataValidator $validator,
+        private JsonValidator     $jsonValidator,
+        private JsonDataValidator $dataValidator,
+        private Sanitizer         $dataSanitizer,
         private DataStorage       $storage
     )
     {
     }
 
     /**
-     * @param array $data
+     * @param string $data
      * @return true[]
      * @throws ValidationException
      */
-    public function handle(array $data): array
+    public function handle(string $data): array
     {
-        if (!$this->validator->validate($data)) {
+        if (!$this->jsonValidator->validate($data)) {
+            throw new ValidationException('Invalid JSON');
+        }
+
+        $data = json_decode($data, true);
+
+        if (!$this->dataValidator->validate($data)) {
             throw new ValidationException('Invalid data');
         }
 
-        $sanitizedData = $this->validator->sanitize($data);
+        $sanitizedData = $this->dataSanitizer->sanitize($data);
 
         if ($this->storage->save($sanitizedData)) {
             return ['success' => true];
